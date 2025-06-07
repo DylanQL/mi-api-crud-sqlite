@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Navbar from "@/components/Navbar";
 
 interface Producto {
   idProducto: number;
@@ -98,9 +97,10 @@ export default function EditarProductoPage({ params }: { params: { id: string } 
   if (isLoading) {
     return (
       <>
-        <Navbar />
-        <div className="container mx-auto px-4 py-6">
-          <p>Cargando producto...</p>
+        <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="flex justify-center items-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          </div>
         </div>
       </>
     );
@@ -108,20 +108,34 @@ export default function EditarProductoPage({ params }: { params: { id: string } 
 
   return (
     <>
-      <Navbar />
-      <div className="container mx-auto px-4 py-6">
-        <h1 className="text-2xl font-bold mb-6">Editar Producto</h1>
+      <div className="bg-white rounded-lg shadow-sm p-6">
+        <div className="flex items-center mb-6">
+          <button 
+            onClick={() => router.push('/productos')} 
+            className="p-2 mr-2 rounded-full hover:bg-gray-100"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+          </button>
+          <h1 className="text-2xl font-bold text-gray-800">Editar Producto</h1>
+        </div>
 
         {error && (
-          <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">
-            {error}
+          <div className="mb-6 p-4 bg-red-100 border-l-4 border-red-500 text-red-700 rounded">
+            <div className="flex">
+              <svg className="h-6 w-6 text-red-500 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              <span>{error}</span>
+            </div>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="max-w-md">
-          <div className="mb-4">
-            <label htmlFor="nombre" className="block mb-1">
-              Nombre
+        <form onSubmit={handleSubmit} className="max-w-md bg-white p-6 rounded-lg border border-gray-100">
+          <div className="form-group">
+            <label htmlFor="nombre" className="form-label">
+              Nombre del producto
             </label>
             <input
               type="text"
@@ -130,30 +144,35 @@ export default function EditarProductoPage({ params }: { params: { id: string } 
               value={formData.nombre}
               onChange={handleChange}
               required
-              className="w-full border rounded px-3 py-2"
+              className="form-control"
             />
           </div>
 
-          <div className="mb-4">
-            <label htmlFor="precio" className="block mb-1">
-              Precio
+          <div className="form-group">
+            <label htmlFor="precio" className="form-label">
+              Precio (S/)
             </label>
-            <input
-              type="number"
-              id="precio"
-              name="precio"
-              value={formData.precio}
-              onChange={handleChange}
-              required
-              min="0"
-              step="0.01"
-              className="w-full border rounded px-3 py-2"
-            />
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <span className="text-gray-500">S/</span>
+              </div>
+              <input
+                type="number"
+                id="precio"
+                name="precio"
+                value={formData.precio}
+                onChange={handleChange}
+                required
+                min="0"
+                step="0.01"
+                className="form-control pl-10"
+              />
+            </div>
           </div>
 
-          <div className="mb-4">
-            <label htmlFor="stock" className="block mb-1">
-              Stock
+          <div className="form-group">
+            <label htmlFor="stock" className="form-label">
+              Stock disponible
             </label>
             <input
               type="number"
@@ -163,12 +182,12 @@ export default function EditarProductoPage({ params }: { params: { id: string } 
               onChange={handleChange}
               required
               min="0"
-              className="w-full border rounded px-3 py-2"
+              className="form-control"
             />
           </div>
 
-          <div className="mb-4">
-            <label htmlFor="idCategoria" className="block mb-1">
+          <div className="form-group">
+            <label htmlFor="idCategoria" className="form-label">
               Categoría
             </label>
             <select
@@ -177,21 +196,38 @@ export default function EditarProductoPage({ params }: { params: { id: string } 
               value={formData.idCategoria}
               onChange={handleChange}
               required
-              className="w-full border rounded px-3 py-2"
+              className="form-control"
             >
-              <option value="1">Categoría 1</option>
-              <option value="2">Categoría 2</option>
-              <option value="3">Categoría 3</option>
+              <option value="1">Electrónica</option>
+              <option value="2">Accesorios</option>
+              <option value="3">Periféricos</option>
             </select>
           </div>
 
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 disabled:bg-green-300"
-          >
-            {isSubmitting ? "Actualizando..." : "Actualizar Producto"}
-          </button>
+          <div className="mt-8 flex gap-3">
+            <button
+              type="button"
+              onClick={() => router.push('/productos')}
+              className="btn btn-outline"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="btn btn-success"
+            >
+              {isSubmitting ? (
+                <span className="flex items-center">
+                  <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Actualizando...
+                </span>
+              ) : "Actualizar Producto"}
+            </button>
+          </div>
         </form>
       </div>
     </>

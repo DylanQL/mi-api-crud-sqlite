@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from "react";
-import Navbar from "@/components/Navbar";
 
 interface Producto {
   idProducto: number;
@@ -40,7 +39,6 @@ export default function AlmacenPage() {
 
   return (
     <>
-      <Navbar />
       <div className="container mx-auto px-4 py-6">
         <h1 className="text-2xl font-bold mb-6">Inventario de Almacén</h1>
 
